@@ -1,0 +1,36 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "dockerComposeFile": [
+    "./../compose.yaml",
+    "./../compose.dev.yaml"
+  ],
+  "service": "frankenphp",
+  "workspaceFolder": "/app",
+  "forwardPorts": ["frankenphp:80", "frankenphp:443", "mailpit:8025", "db:3306"],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.associations": {
+          ".env.*.local": "dotenv",
+          ".env.*": "dotenv",
+          ".env": "dotenv"
+        },
+        "files.exclude": {
+          "var/": true,
+          "vendor/": true
+        },
+        "intelephense.diagnostics.enable": true,
+        "intelephense.environment.phpVersion": "${containerEnv:PHP_VERSION}",
+        "intelephense.format.enable": true,
+        "intelephense.telemetry.enabled": false
+      },
+      "extensions": [
+          "bmewburn.vscode-intelephense-client",
+          "donjayamanne.githistory",
+          "mikestead.dotenv",
+          "pflannery.vscode-versionlens",
+          "remcohaszing.schemastore"
+        ]
+    }
+  }
+}

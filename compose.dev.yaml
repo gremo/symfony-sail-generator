@@ -1,0 +1,27 @@
+services:
+    frankenphp:
+        build:
+            target: frankenphp_dev
+        volumes:
+            - var:/app/var
+            - vendor:/app/vendor
+            - ./config/docker/cron:/etc/cron.d/app
+            - ./config/docker/php.dev.ini:/usr/local/etc/php/conf.d/30-php.ini
+            - ./config/docker/php.ini:/usr/local/etc/php/conf.d/20-php.ini
+            - ./config/docker/supervisor.conf:/etc/supervisor/conf.d/app.conf
+            - .:/app
+        environment:
+            CADDY_GLOBAL_OPTIONS: debug
+            DATABASE_URL: mysql://${MARIADB_USER:-app}:${MARIADB_PASSWORD:-!ChangeMe!}@db:3306/${MARIADB_DATABASE:-app}?charset=${MARIADB_CHARSET:-utf8}
+            TZ: ${TZ:-UTC}
+
+    mailpit:
+        container_name: ${COMPOSE_PROJECT_NAME}-mailpit
+        image: axllent/mailpit
+        environment:
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+volumes:
+    var:
+    vendor:

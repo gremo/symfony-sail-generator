@@ -1,0 +1,9 @@
+services:
+    frankenphp:
+        env_file:
+            - path: .env.prod.local
+              required: false
+        ports:
+            - 80:80
+            - 443:443
+            - 443:443/udp
