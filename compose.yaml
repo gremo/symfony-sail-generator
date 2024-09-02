@@ -3,26 +3,35 @@ services:
         container_name: ${COMPOSE_PROJECT_NAME}-frankenphp
         build:
             target: frankenphp_prod
+            args:
+                FRANKENPHP_TAG: latest
+                NODE_VERSION: current
         volumes:
-            - caddy-config:/config
-            - caddy-data:/data
-        environment:
-            SERVER_NAME: ${SERVER_NAME:-localhost}
+            - frankenphp-config:/config
+            - frankenphp-data:/data
         restart: unless-stopped
 
     db:
         container_name: ${COMPOSE_PROJECT_NAME}-db
-        image: mariadb
-        volumes:
-            - db-data:/var/lib/mysql
+        image: mariadb:latest
         environment:
             MARIADB_USER: ${MARIADB_USER:-app}
             MARIADB_PASSWORD: ${MARIADB_PASSWORD:-!ChangeMe!}
             MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
             MARIADB_RANDOM_ROOT_PASSWORD: true
+        volumes:
+            - db-data:/var/lib/mysql
         restart: unless-stopped
 
+    phpmyadmin:
+        container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
+        image: phpmyadmin:latest
+        environment:
+            APACHE_PORT: 8080
+            PMA_ARBITRARY: true
+            PMA_HOST: db
+
 volumes:
-    caddy-config:
-    caddy-data:
+    frankenphp-config:
+    frankenphp-data:
     db-data:

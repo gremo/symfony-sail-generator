@@ -1,0 +1,11 @@
+/assets/controllers.json
+/config/
+/node_modules/
+/public/build/
+/public/bundles/
+/var/
+/vendor/
+*.md
+composer.lock
+package-lock.json
+webpack.config.js

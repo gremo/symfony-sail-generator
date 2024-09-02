@@ -1,36 +1,92 @@
 {
   "name": "${localWorkspaceFolderBasename}",
-  "dockerComposeFile": [
-    "./../compose.yaml",
-    "./../compose.dev.yaml"
-  ],
+  "dockerComposeFile": ["./../compose.yaml", "./../compose.dev.yaml"],
   "service": "frankenphp",
   "workspaceFolder": "/app",
-  "forwardPorts": ["frankenphp:80", "frankenphp:443", "mailpit:8025", "db:3306"],
+  "forwardPorts": [
+    "frankenphp:80",
+    "frankenphp:443",
+    "phpmyadmin:8080",
+    "db:3306",
+    "mailpit:8025"
+  ],
   "customizations": {
     "vscode": {
       "settings": {
+        "[php]": {
+          "editor.defaultFormatter": "ValeryanM.vscode-phpsab"
+        },
+        "css.validate": false,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "always"
+        },
+        "editor.codeLens": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.linkedEditing": false,
+        "emmet.includeLanguages": {
+          "twig": "html"
+        },
+        "eslint.enable": true,
+        "eslint.format.enable": true,
         "files.associations": {
           ".env.*.local": "dotenv",
           ".env.*": "dotenv",
           ".env": "dotenv"
         },
         "files.exclude": {
+          "node_modules/": true,
+          "public/build/": true,
+          "public/bundles/": true,
+          "public/media/": true,
+          "public/uploads/": true,
           "var/": true,
           "vendor/": true
         },
         "intelephense.diagnostics.enable": true,
         "intelephense.environment.phpVersion": "${containerEnv:PHP_VERSION}",
         "intelephense.format.enable": true,
-        "intelephense.telemetry.enabled": false
+        "intelephense.telemetry.enabled": false,
+        "javascript.validate.enable": false,
+        "less.validate": false,
+        "php.suggest.basic": false,
+        "php.validate.enable": false,
+        "phpsab.autoRulesetSearch": true,
+        "phpsab.executablePathCBF": "vendor/bin/phpcbf",
+        "phpsab.executablePathCS": "vendor/bin/phpcs",
+        "phpsab.fixerEnable": true,
+        "phpsab.snifferEnable": true,
+        "phpsab.snifferMode": "onType",
+        "phpsab.snifferShowSources": true,
+        "phpsab.standard": "PSR12",
+        "phpstan.enabled": true,
+        "phpstan.initialAnalysis": false,
+        "phpstan.path": "vendor/bin/phpstan",
+        "prettier.enable": true,
+        "scss.validate": false,
+        "todo-tree.filtering.excludeGlobs": [
+          "node_modules/",
+          "public/build/",
+          "public/bundles/",
+          "var/",
+          "vendor/"
+        ]
       },
       "extensions": [
-          "bmewburn.vscode-intelephense-client",
-          "donjayamanne.githistory",
-          "mikestead.dotenv",
-          "pflannery.vscode-versionlens",
-          "remcohaszing.schemastore"
-        ]
+        "bmewburn.vscode-intelephense-client",
+        "dbaeumer.vscode-eslint",
+        "donjayamanne.githistory",
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
+        "gruntfuggly.todo-tree",
+        "mblode.twig-language-2",
+        "mikestead.dotenv",
+        "pflannery.vscode-versionlens",
+        "recca0120.vscode-phpunit",
+        "remcohaszing.schemastore",
+        "swordev.phpstan",
+        "ValeryanM.vscode-phpsab"
+      ]
     }
   }
 }

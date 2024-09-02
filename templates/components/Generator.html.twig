@@ -1,0 +1,129 @@
+<div {{ attributes.defaults({ class: "row" }) }}>
+    {{ form_start(form, {
+        attr: {
+            class: "col-lg-4",
+            'data-action': 'live#action:prevent',
+            'data-live-action-param': 'generate',
+            novalidate: true,
+        }
+    }) }}
+        {% if presets|length %}
+            <div class="btn-group btn-group-sm mb-2" role="group">
+                {% for name, hash in presets %}
+                    <button class="btn btn-dark"
+                        data-action="live#action"
+                        data-live-action-param="loadPreset"
+                        data-live-hash-param="{{ hash }}"
+                    >
+                        {{ name }}
+                    </button>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {{ form_errors(form) }}
+
+        <fieldset>
+            <legend class="py-2 badge text-bg-dark text-start">Container</legend>
+            {{ form_row(form.phpVersion, { row_attr: { class: "form-floating mb-3" } }) }}
+
+            <div class="mb-3 d-flex align-items-start">
+                {{ form_row(form.enableNode, { row_attr: { class: "flex-grow-1" }, label_attr: { class: "checkbox-switch" } }) }}
+
+                {% if form.nodeVersion is defined %}
+                    <a class="small"
+                        href="#node-customizations"
+                        data-bs-toggle="collapse"
+                        aria-expanded="false"
+                        aria-controls="collapseExample"
+                    >
+                        customize
+                    </a>
+                {% endif %}
+            </div>
+
+            {% if form.nodeVersion is defined %}
+                <div id="node-customizations" class="collapse">
+                    {{ form_row(form.nodeVersion, { row_attr: { class: "form-floating mb-3" } }) }}
+                </div>
+            {% endif %}
+
+            {{ form_row(form.enableCron, { label_attr: { class: "checkbox-inline checkbox-switch" } }) }}
+            {{ form_row(form.enableSupervisor, { label_attr: { class: "checkbox-inline checkbox-switch" } }) }}
+            <div class="mb-3 d-flex align-items-center">
+                {{ form_row(form.enableOPcachePreload, { row_attr: { class: "flex-grow-1" }, label_attr: { class: "checkbox-switch" } }) }}
+                <span class="badge text-bg-warning">prod</span>
+            </div>
+            <div class="mb-3 d-flex align-items-center">
+                {{ form_row(form.enableFrankenPHPRuntime, { row_attr: { class: "flex-grow-1" }, label_attr: { class: "checkbox-switch" } }) }}
+                <span class="badge text-bg-warning">prod</span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend class="py-2 badge text-bg-dark text-start">Database</legend>
+            {{ form_row(form.dbms, { attr: { class: "form-select-lg" }, label_attr: { class: "visually-hidden" } }) }}
+            {% if form.dbmsVersion is defined %}
+                {{ form_row(form.dbmsVersion, { row_attr: { class: "form-floating mb-3" } }) }}
+            {% endif %}
+            {% if form.enablePhpMyAdmin is defined %}
+                {{ form_row(form.enablePhpMyAdmin, { label_attr: { class: "checkbox-switch" } }) }}
+            {% endif %}
+        </fieldset>
+
+        <fieldset>
+            <legend class="py-2 badge text-bg-dark text-start">
+                Other
+            </legend>
+
+            <div class="d-flex align-items-center justify-content-between">
+                {{ form_row(form.enableMailpit, { label_attr: { class: "checkbox-switch" } }) }}
+                <span class="badge text-bg-warning">dev</span>
+            </div>
+
+            {{ form_row(form.assetsInstallMethod, { attr: { class: "form-select-lg" }, label_attr: { class: "visually-hidden" } }) }}
+            {{ form_row(form.assetsBuildMethod, { attr: { class: "form-select-lg" }, label_attr: { class: "visually-hidden" } }) }}
+        </fieldset>
+    {{ form_end(form) }}
+
+    <div class="col-lg-8">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                {% for filename in files|keys %}
+                    <button
+                        id="nav-{{ filename }}-tab"
+                        class="nav-link{% if loop.first %} active{% endif %}"
+                        data-bs-toggle="tab"
+                        data-bs-target="#nav-{{ filename }}"
+                        type="button"
+                        role="tab"
+                        aria-controls="nav-{{ filename }}"
+                        aria-selected="true"
+                    >
+                        <pre class="m-0 text-dark">{{ filename }}</pre>
+                    </button>
+                {% endfor %}
+                {% if optionsHash %}
+                    <a href="{{ path("app_test", { hash: optionsHash }) }}" class="btn btn-dark ms-auto">
+                        Download
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent3">
+            {% for filename, content in files %}
+                <div
+                    id="nav-{{ filename }}"
+                    class="tab-pane show{% if loop.first %} active{% endif %}"
+                    role="tabpanel"
+                    aria-labelledby="nav-{{ filename }}-tab"
+                    tabindex="0"
+                >
+                    <pre class="p-3 bg-dark text-white rounded" style="max-height: 800px">
+                        {{- (content ?? '')|spaceless -}}
+                    </pre>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

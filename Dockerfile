@@ -1,8 +1,12 @@
+ARG FRANKENPHP_TAG=
+
 ###############################################################################
 # Franken base stage
 ###############################################################################
-FROM dunglas/frankenphp AS frankenphp_base
+FROM dunglas/frankenphp:$FRANKENPHP_TAG AS frankenphp_base
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+
+ARG NODE_VERSION=
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -20,8 +24,8 @@ RUN \
         unzip \
     ; \
     # Configure OS
-    sed -i '/^exec "$@"$/i # Start supervisor service\nchmod 644 /etc/cron.d/app\nservice supervisor start\n' /usr/local/bin/docker-php-entrypoint; \
-    sed -i '/^exec "$@"$/i # Start cron service\nchmod 644 /etc/supervisor/conf.d/app.conf\nservice cron start\n' /usr/local/bin/docker-php-entrypoint; \
+    sed -i '/^exec "$@"$/i chmod 644 /etc/cron.d/app\nservice cron start\n' /usr/local/bin/docker-php-entrypoint; \
+    sed -i '/^exec "$@"$/i # chmod 644 /etc/supervisor/conf.d/app.conf\nservice supervisor start\n' /usr/local/bin/docker-php-entrypoint; \
     # Install PHP extensions
     install-php-extensions \
         @composer \
@@ -45,7 +49,7 @@ RUN \
         echo zend.detect_unicode = 0; \
     } >> "$PHP_INI_DIR/conf.d/10-php.ini"; \
     # Install Node.js
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -; \
+    curl -fsSL "https://deb.nodesource.com/setup_$NODE_VERSION.x" | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
     npm install -g yarn; \
     # Cleanup
@@ -85,7 +89,6 @@ COPY --link config/docker/cron /etc/cron.d/app
 COPY --link config/docker/php.ini $PHP_INI_DIR/conf.d/20-php.ini
 COPY --link config/docker/php.ini $PHP_INI_DIR/conf.d/20-php.ini
 COPY --link config/docker/supervisor.conf /etc/supervisor/conf.d/app.conf
-
 COPY --link composer.* symfony.* ./
 
 RUN composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress

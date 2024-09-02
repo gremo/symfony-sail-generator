@@ -1,0 +1,14 @@
+{
+    "semi": true,
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "plugins": ["@trivago/prettier-plugin-sort-imports"],
+    "overrides": [
+        {
+            "files": "*.{yml,yaml,js,jsx,ts,tsx}",
+            "options": {
+                "printWidth": 120
+            }
+        }
+    ]
+}

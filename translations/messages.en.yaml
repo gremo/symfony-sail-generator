@@ -1,0 +1,15 @@
+assets_build:
+    asset_mapper: AssetMapper
+    encore: Webpack Encore
+    npm: npm script
+    vite: Vite
+
+assets_install:
+    npm: npm
+    yarn1: Yarn (legacy)
+    yarn2: Yarn
+
+database:
+    mariadb: MariaDB
+    mysql: MySQL
+    postgresql: PostgreSQL
